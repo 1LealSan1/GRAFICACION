@@ -1,36 +1,17 @@
-const canvas = document.getElementById("canvas");
-const context = canvas.getContext("2d");
-var x1, y1, x2, y2
+var canvas = document.getElementById('canvas');
+var context = canvas.getContext('2d');
+let startX, startY, endX, endY;
 
-function showCoords(event) {
-  var x = event.offsetX;
-  var y = event.offsetY;
+canvas.addEventListener("mousedown", function(event) {
+    startX = event.offsetX;
+    startY = event.offsetY;
+});
 
-  if(x1==null){
-    x1 = x
-  }else if(x2==null){
-    x2 = x
-  }
-
-  if(y1==null){
-    y1 = y
-  }else if(y2==null){
-    y2 = y
-  }
-
-  if(x1 != null && x2 != null && y1 != null && y2 != null){
-    console.log(x1, y1, x2, y2)
-    Bresenham(x1, y1, x2, y2)
-    x1 = null
-    x2 = null
-    y1 = null
-    y2 = null
-  }
-}
-
-function clearCoor() {
-  document.getElementById("demo").innerHTML = "";
-}
+canvas.addEventListener("mouseup", function(event) {
+    endX = event.offsetX;
+    endY = event.offsetY;
+    drawSquare(startX, startY, endX, endY)
+});
 
 // DDA function
 function DDA(x1, y1, x2, y2) {
@@ -100,4 +81,18 @@ function Bresenham(startX, startY, endX, endY) {
       startY += sy;
     }
   }
+}
+function drawSquare(x1, y1, x2, y2) {
+  //Primera linea base
+  DDA(x1, y1, x2, y2)
+
+  //segunda linea base
+  dyx = y1 + Math.abs(x2 - x1);
+  DDA(x1, y1, x1, dyx)
+
+  //tercera linea base
+  DDA(x1, dyx, x2, dyx)
+
+  //cuarta linea base
+  DDA(x2, dyx, x2, y2)
 }
