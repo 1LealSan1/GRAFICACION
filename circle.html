@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      #canvas {
+        border: 1px solid black;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas" width="500" height="500"></canvas>
+    <script>
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
+      let isDrawing = false;
+      let startX = 0;
+      let startY = 0;
+      let endX = 0;
+      let endY = 0;
+      
+      function drawCircle(x0, y0, radius) {
+        let x = radius;
+        let y = 0;
+        let decisionOver2 = 1 - x;
+  
+        while (y <= x) {
+          ctx.fillRect(x + x0, y + y0, 1, 1);
+          ctx.fillRect(y + x0, x + y0, 1, 1);
+          ctx.fillRect(-x + x0, y + y0, 1, 1);
+          ctx.fillRect(-y + x0, x + y0, 1, 1);
+          ctx.fillRect(-x + x0, -y + y0, 1, 1);
+          ctx.fillRect(-y + x0, -x + y0, 1, 1);
+          ctx.fillRect(x + x0, -y + y0, 1, 1);
+          ctx.fillRect(y + x0, -x + y0, 1, 1);
+          y++;
+          if (decisionOver2 <= 0) {
+            decisionOver2 += 2 * y + 1;
+          } else {
+            x--;
+            decisionOver2 += 2 * (y - x) + 1;
+          }
+        }
+      }
+      
+      function clearCanvas() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+      
+      function drawPreview() {
+        clearCanvas();
+        let x0 = (startX + endX) / 2;
+        let y0 = (startY + endY) / 2;
+        let radius = Math.max(Math.abs(startX - endX), Math.abs(startY - endY)) / 2;
+        ctx.beginPath();
+        ctx.arc(x0, y0, radius, 0, 2 * Math.PI);
+        ctx.stroke();
+      }
+      
+      canvas.addEventListener("mousedown", function(event) {
+        isDrawing = true;
+        startX = event.clientX - canvas.offsetLeft;
+        startY = event.clientY - canvas.offsetTop;
+      });
+      
+      canvas.addEventListener("mouseup", function(event) {
+        isDrawing = false;
+        endX = event.clientX - canvas.offsetLeft;
+        endY = event.clientY - canvas.offsetTop

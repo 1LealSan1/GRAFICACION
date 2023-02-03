@@ -10,7 +10,7 @@ canvas.addEventListener("mousedown", function(event) {
 canvas.addEventListener("mouseup", function(event) {
     endX = event.offsetX;
     endY = event.offsetY;
-    drawSquare(startX, startY, endX, endY)
+    drawCircle(startX, startY, endX, endY)
 });
 
 // DDA function
@@ -95,4 +95,31 @@ function drawSquare(x1, y1, x2, y2) {
 
   //cuarta linea base
   DDA(x2, dyx, x2, y2)
+}
+
+function drawCircle(startX, startY, endX, endY) {
+  let x0 = (startX + endX) / 2;
+  let y0 = (startY + endY) / 2;
+  radius  = Math.max(Math.abs(startX - endX), Math.abs(startY - endY)) / 2;
+  let x = radius;
+  let y = 0;
+  let decisionOver2 = 1 - x;
+
+  while (y <= x) {
+    context.fillRect(x + x0, y + y0, 1, 1);
+    context.fillRect(y + x0, x + y0, 1, 1);
+    context.fillRect(-x + x0, y + y0, 1, 1);
+    context.fillRect(-y + x0, x + y0, 1, 1);
+    context.fillRect(-x + x0, -y + y0, 1, 1);
+    context.fillRect(-y + x0, -x + y0, 1, 1);
+    context.fillRect(x + x0, -y + y0, 1, 1);
+    context.fillRect(y + x0, -x + y0, 1, 1);
+    y++;
+    if (decisionOver2 <= 0) {
+      decisionOver2 += 2 * y + 1;
+    } else {
+      x--;
+      decisionOver2 += 2 * (y - x) + 1;
+    }
+  }
 }
