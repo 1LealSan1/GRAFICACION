@@ -1,7 +1,6 @@
 var canvas = document.getElementById('canvas');
 var context = canvas.getContext('2d');
-let startX, startY, endX, endY;
-
+let startX, startY, endX, endY, option;
 canvas.addEventListener("mousedown", function(event) {
     startX = event.offsetX;
     startY = event.offsetY;
@@ -10,9 +9,12 @@ canvas.addEventListener("mousedown", function(event) {
 canvas.addEventListener("mouseup", function(event) {
     endX = event.offsetX;
     endY = event.offsetY;
-    drawCircle(startX, startY, endX, endY)
+    option(startX, startY, endX, endY)
 });
-
+function opcion(){
+  const option = document.getElementById("btnradio1").value;  
+  console.log(option)
+}
 // DDA function
 function DDA(x1, y1, x2, y2) {
   let dx = Math.abs(x2 - x1);
