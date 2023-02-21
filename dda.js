@@ -9,12 +9,20 @@ canvas.addEventListener("mousedown", function(event) {
 canvas.addEventListener("mouseup", function(event) {
     endX = event.offsetX;
     endY = event.offsetY;
-    option(startX, startY, endX, endY)
+    
+    if(option == 'line'){
+      Bresenham(startX, startY, endX, endY)
+    }else if(option =='circle'){
+      drawCircle(startX, startY, endX, endY)
+    }else if(option == 'square'){
+      drawSquare(startX, startY, endX, endY)
+    }
 });
-function opcion(){
-  const option = document.getElementById("btnradio1").value;  
-  console.log(option)
+
+function opcion(op){
+  option = op
 }
+
 // DDA function
 function DDA(x1, y1, x2, y2) {
   let dx = Math.abs(x2 - x1);
@@ -84,16 +92,17 @@ function Bresenham(startX, startY, endX, endY) {
     }
   }
 }
+
 function drawSquare(x1, y1, x2, y2) {
   //Primera linea base
-  DDA(x1, y1, x2, y2)
+  Bresenham(x1, y1, x2, y2)
 
   //segunda linea base
   dyx = y1 + Math.abs(x2 - x1);
-  DDA(x1, y1, x1, dyx)
+  Bresenham(x1, y1, x1, dyx)
 
   //tercera linea base
-  DDA(x1, dyx, x2, dyx)
+  Bresenham(x1, dyx, x2, dyx)
 
   //cuarta linea base
   DDA(x2, dyx, x2, y2)
