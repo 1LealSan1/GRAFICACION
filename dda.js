@@ -1,6 +1,7 @@
 var canvas = document.getElementById('canvas');
 var context = canvas.getContext('2d');
 let startX, startY, endX, endY, option;
+
 canvas.addEventListener("mousedown", function(event) {
     startX = event.offsetX;
     startY = event.offsetY;
@@ -16,6 +17,14 @@ canvas.addEventListener("mouseup", function(event) {
       drawCircle(startX, startY, endX, endY)
     }else if(option == 'square'){
       drawSquare(startX, startY, endX, endY)
+    }else if(option == 'pentagon'){
+      drawPoligon(startX, startY, endX, endY, 5)
+    }else if(option == 'hexagon'){
+      drawPoligon(startX, startY, endX, endY, 6)
+    }else if(option == 'heptagon'){
+      drawPoligon(startX, startY, endX, endY, 7)
+    }else if(option == 'octagon'){
+      drawPoligon(startX, startY, endX, endY, 8)
     }
 });
 
@@ -133,4 +142,51 @@ function drawCircle(startX, startY, endX, endY) {
       decisionOver2 += 2 * (y - x) + 1;
     }
   }
+}
+
+function drawPoligon2(centerX, centerY, xCoords, yCoords, sides){
+  for (let i = 0; i < sides; i++) {
+    const angle = (i * 2 * Math.PI) / sides;
+    const x = centerX + radius * Math.cos(angle);
+    const y = centerY + radius * Math.sin(angle);
+    xCoords.push(x);
+    yCoords.push(y);
+  }
+
+  for (let i = 0; i < sides; i++) {
+    let x1 = xCoords[i];
+    let y1 = yCoords[i];
+    let x2 = xCoords[(i + 1) % sides];
+    let y2 = yCoords[(i + 1) % sides];
+
+    let dx = x2 - x1;
+    let dy = y2 - y1;
+    let steps = Math.max(Math.abs(dx), Math.abs(dy));
+
+    let xIncrement = dx / steps;
+    let yIncrement = dy / steps;
+
+    let x = x1;
+    let y = y1;
+
+    context.beginPath();
+    context.moveTo(x, y);
+
+    for (let j = 0; j < steps; j++) {
+      x += xIncrement;
+      y += yIncrement;
+      context.lineTo(x, y);
+    }
+
+    context.stroke();
+  }
+}
+
+function drawPoligon(startX, startY, endX, endY, sides){
+  let centerX = (startX + endX) / 2;
+  let centerY = (startY + endY) / 2;
+  let xCoords = [], yCoords = [];
+  radius  = Math.max(Math.abs(startX - endX), Math.abs(startY - endY)) / 2;
+
+  drawPoligon2(centerX, centerY, xCoords, yCoords, sides)
 }

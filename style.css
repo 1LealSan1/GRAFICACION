@@ -6,3 +6,7 @@ canvas{
     margin-top: 45px;
     border: 1px solid black;
 }
+.icon{
+    width: 16px;
+    height: 16px;
+}

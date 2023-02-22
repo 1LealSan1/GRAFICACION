@@ -6,28 +6,43 @@
     <link href="style.css" rel="stylesheet">
 </head>
 <body>
-    <div class="container m-3 text-center">
-        <div class="row align-items-center">
-            <form>
-                <div class="btn-group-block" role="radiogroup" aria-label="Basic radio toggle button group">
-                    <input type="radio" class="btn-check" name="btnradio" id="btnradio1" onclick="opcion('line')">
-                    <label class="btn btn-outline-primary" for="btnradio1">Linea</label>
+    <div class="container m-3">
+        <div class="row bg-dark-subtle m-lg-1 p-3">
+            <div class="col-auto">
+                <form>
+                    <div class="btn-group-block" role="radiogroup" aria-label="Basic radio toggle button group">
+                        <input type="radio" class="btn-check" name="btnradio" id="btnradio1" onclick="opcion('line')">
+                        <label class="btn btn-outline-primary" for="btnradio1"><img src="img/line.png" class="icon"></label>
+        
+                        <input type="radio" class="btn-check" name="btnradio" id="btnradio2" onclick="opcion('circle')">
+                        <label class="btn btn-outline-primary" for="btnradio2"><img src="img/circle.svg"></label>
     
-                    <input type="radio" class="btn-check" name="btnradio" id="btnradio2" onclick="opcion('circle')">
-                    <label class="btn btn-outline-primary" for="btnradio2">Circulo</label>
-                  
-                    <input type="radio" class="btn-check" name="btnradio" id="btnradio3" onclick="opcion('square')">
-                    <label class="btn btn-outline-primary" for="btnradio3">Cuadrado</label>
-                </div>
-            </form>
+                        <input type="radio" class="btn-check" name="btnradio" id="btnradio3" onclick="opcion('square')">
+                        <label class="btn btn-outline-primary" for="btnradio3"><img src="img/square.svg"></label>
+
+                        <input type="radio" class="btn-check" name="btnradio" id="btnradio4" onclick="opcion('pentagon')">
+                        <label class="btn btn-outline-primary" for="btnradio4"><img src="img/pentagon.svg"></label>
+
+                        <input type="radio" class="btn-check" name="btnradio" id="btnradio5" onclick="opcion('hexagon')">
+                        <label class="btn btn-outline-primary" for="btnradio5"><img src="img/hexagon.svg"></label>
+
+                        <input type="radio" class="btn-check" name="btnradio" id="btnradio6" onclick="opcion('heptagon')">
+                        <label class="btn btn-outline-primary" for="btnradio6"><img src="img/heptagon.svg"></label>
+
+                        
+                        <input type="radio" class="btn-check" name="btnradio" id="btnradio7" onclick="opcion('octagon')">
+                        <label class="btn btn-outline-primary" for="btnradio7"><img src="img/octagon.svg"></label>
+                    </div>
+                </form>
+            </div>
         </div>            
-        <div class="row gx-5 align-items-center">
-            <dir class="col-auto">
-                <div class="p-0">
-                    <canvas id="canvas" width="1000" height="1000"></canvas>
+        <div class="row">
+            <div class="col-auto">
+                <div>
+                    <canvas id="canvas" width="1860" height="780"></canvas>
                     <script src="dda.js"></script>
                 </div>
-            </dir>
+            </div>
         </div>
     </div>
 </body>
