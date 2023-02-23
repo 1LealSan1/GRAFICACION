@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Dibujar cuadrado a través de diagonal con DDA y eventos de ratón</title>
+  </head>
+  <body>
+    <canvas id="myCanvas" width="500" height="500"></canvas>
+    <script>
+      var canvas = document.getElementById("myCanvas");
+      var ctx = canvas.getContext("2d");
+
+      function drawLineDDA(x1, y1, x2, y2) {
+        var dx = x2 - x1;
+        var dy = y2 - y1;
+        var steps = Math.max(Math.abs(dx), Math.abs(dy));
+
+        var xIncrement = dx / steps;
+        var yIncrement = dy / steps;
+
+        var x = x1;
+        var y = y1;
+
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        for (var i = 1; i <= steps; i++) {
+          x += xIncrement;
+          y += yIncrement;
+          ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+      }
+
+      canvas.addEventListener("mousedown", function (event) {
+        var startX = event.offsetX;
+        var startY = event.offsetY;
+        canvas.addEventListener("mouseup", function (event) {
+          var endX = event.offsetX;
+          var endY = event.offsetY;
+
+          var width = Math.abs(endX - startX);
+          var height = Math.abs(endY - startY);
+          var squareSize = Math.max(width, height);
+
+          var centerX = (startX + endX) / 2;
+          var centerY = (startY + endY) / 2;
+          var squareX = centerX - squareSize / 2;
+          var squareY = centerY - squareSize / 2;
+
+          drawLineDDA(squareX, squareY, squareX + squareSize, squareY);
+          drawLineDDA(squareX + squareSize, squareY, squareX + squareSize, squareY + squareSize);
+          drawLineDDA(squareX + squareSize, squareY + squareSize, squareX, squareY + squareSize);
+          drawLineDDA(squareX, squareY + squareSize, squareX, squareY);
+        });
+      });
+    </script>
+  </body>
+</html>
