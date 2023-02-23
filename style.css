@@ -10,3 +10,11 @@ canvas{
     width: 16px;
     height: 16px;
 }
+.nulo{
+    position: absolute;
+    z-index: 0;
+}
+.prev{
+    position: absolute;
+    z-index: 1;
+}

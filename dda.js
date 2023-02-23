@@ -1,18 +1,21 @@
 var canvas = document.getElementById('canvas');
-var context = canvas.getContext('2d');
+var preview = document.getElementById('preview')
+var context = preview.getContext('2d');
+var ctx = preview.getContext('2d');
 let startX, startY, endX, endY, option;
 
-canvas.addEventListener("mousedown", function(event) {
-    startX = event.offsetX;
-    startY = event.offsetY;
+preview.addEventListener("mousedown", function(event){
+  startX = event.offsetX;
+  startY = event.offsetY;
 });
 
-canvas.addEventListener("mouseup", function(event) {
-    endX = event.offsetX;
-    endY = event.offsetY;
-    
+preview.addEventListener("mousemove", function(event) {
+  endX = event.offsetX;
+  endY = event.offsetY;
+  limpiar();
+  if(startX!=null && startY!=null && endX!= null && endY != null ){
     if(option == 'line'){
-      Bresenham(startX, startY, endX, endY)
+      Bresenham(startX, startY, endX, endY, 0)
     }else if(option =='circle'){
       drawCircle(startX, startY, endX, endY)
     }else if(option == 'square'){
@@ -25,13 +28,23 @@ canvas.addEventListener("mouseup", function(event) {
       drawPoligon(startX, startY, endX, endY, 7)
     }else if(option == 'octagon'){
       drawPoligon(startX, startY, endX, endY, 8)
-    }
+    }          
+  }
+});
+
+preview.addEventListener("mouseup",function(event){
+  endX = event.offsetX;
+  endY = event.offsetY;
+  limpiar();
 });
 
 function opcion(op){
   option = op
 }
 
+function limpiar(){
+  context.clearRect(0, 0, preview.width, preview.height);
+}
 // DDA function
 function DDA(x1, y1, x2, y2) {
   let dx = Math.abs(x2 - x1);
@@ -80,7 +93,7 @@ function drawLine(startX, startY, endX, endY) {
   }
 }
 
-function Bresenham(startX, startY, endX, endY) {
+function Bresenham(startX, startY, endX, endY, l) {
   let dx = Math.abs(endX - startX);
   let dy = Math.abs(endY - startY);
   let sx = (startX < endX) ? 1 : -1;
@@ -88,6 +101,9 @@ function Bresenham(startX, startY, endX, endY) {
   let error = dx - dy;
 
   while (true) {
+    if(l== 0){
+      context.fillRect(startX, startY, 1, 1);      
+    }
     context.fillRect(startX, startY, 1, 1);
     if (startX === endX && startY === endY) break;
     let e2 = 2 * error;
