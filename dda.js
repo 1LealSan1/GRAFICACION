@@ -3,8 +3,9 @@ var preview = document.getElementById('preview')
 var context = preview.getContext('2d');
 var ctx = canvas.getContext('2d');
 
-let startX, startY, endX, endY, option, isDrawing=false;
-
+let startX, startY, endX, endY, option, isDrawing=false, l;
+var obj = new Object();
+elementos = [];
 preview.addEventListener("mousedown", function(event){
   startX = event.offsetX;
   startY = event.offsetY;
@@ -16,14 +17,29 @@ preview.addEventListener("mousemove", function(event) {
   endX = event.offsetX;
   endY = event.offsetY;
   limpiar();
-  menu(0);
+  l =0;
+  menu(l);
 });
 
 preview.addEventListener("mouseup",function(event){
   isDrawing = false;
   endX = event.offsetX;
   endY = event.offsetY;
-  menu(1)
+  l=1;
+  obj ={
+    startX : startX,
+    startY : startY,
+    endX : endX,
+    endY : endY,
+    l : l,
+    option: option
+  }
+
+  elementos.push(obj);
+  for (var i = 0; i < elementos.length; i++) {
+    menu(elementos[i])
+  }
+  console.log(elementos)
 });
 
 function opcion(op){
@@ -33,22 +49,23 @@ function opcion(op){
 function limpiar(){
   context.clearRect(0, 0, preview.width, preview.height);
 }
-function menu(l){
+
+function menu(){
   if(startX!=null && startY!=null && endX!= null && endY != null ){
     if(option == 'line'){
       Bresenham(startX, startY, endX, endY, l)
     }else if(option =='circle'){
-      drawCircle(startX, startY, endX, endY,l)
+      drawCircle(startX, startY, endX, endY, l)
     }else if(option == 'square'){
-      drawSquare(startX, startY, endX, endY,l)
+      drawSquare(startX, startY, endX, endY, l)
     }else if(option == 'pentagon'){
-      drawPoligon(startX, startY, endX, endY, 5,l)
+      drawPoligon(startX, startY, endX, endY, 5, l)
     }else if(option == 'hexagon'){
-      drawPoligon(startX, startY, endX, endY, 6,l)
+      drawPoligon(startX, startY, endX, endY, 6, l)
     }else if(option == 'heptagon'){
-      drawPoligon(startX, startY, endX, endY, 7,l)
+      drawPoligon(startX, startY, endX, endY, 7, l)
     }else if(option == 'octagon'){
-      drawPoligon(startX, startY, endX, endY, 8,l)
+      drawPoligon(startX, startY, endX, endY, 8, l)
     }          
   }
 }
