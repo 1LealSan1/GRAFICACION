@@ -6,6 +6,7 @@ var ctx = canvas.getContext('2d');
 let startX, startY, endX, endY, option, isDrawing=false, l;
 var obj = new Object();
 elementos = [];
+
 preview.addEventListener("mousedown", function(event){
   startX = event.offsetX;
   startY = event.offsetY;
