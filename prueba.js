@@ -1,8 +1,8 @@
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
-let startX, startY, endX, endY, option; //variables de inicio para los dos puntos y la opcion seleccionada a dibujar
-let lines = [];
+let startX, startY, endX, endY, option,lastX, lastY; //variables de inicio para los dos puntos y la opcion seleccionada a dibujar
+let lines = [], pencil=[];
 let isDrawing = false; // Indica si se está dibujando actualmente
 var obj = new Object();
 var muestrario, color;// variables para alamcenar el input color y el color en hexa
@@ -23,19 +23,22 @@ function actualizarPrimero(event) {
 
 // Función para limpiar el lienzo
 function clearCanvas() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    //ctx.clearRect(0, 0, canvas.width, canvas.height);
     barrido();
 }
 //hace un barrido al arreglo y dibuja las figuras guardadas en el arreglo
 function barrido(){
     lines.forEach(function(line) {
-        menu(line.startX, line.startY, line.endX, line.endY, line.option, line.color);
+        let corde = line.cords
+        menu(line.startX, line.startY, line.endX, line.endY, line.option, line.color, corde);
     });
 }
 // Evento de escucha de mouse para detectar clic y arrastre
 canvas.addEventListener('mousedown', function(event) {
     startX = event.offsetX;
     startY = event.offsetY;
+    lastX = event.offsetX;
+    lastY = event.offsetY;
     isDrawing = true; // Indica que se está dibujando actualmente
 });
 
@@ -44,7 +47,13 @@ canvas.addEventListener("mousemove", function(event) {
     if (isDrawing) { // Verifica si se está dibujando actualmente
       clearCanvas()
       menu(startX, startY, event.offsetX, event.offsetY, option, color); // Dibuja la figura previsualizada
+      let punto={
+        x2: event.offsetX,
+        y2: event.offsetY
+      }
+      pencil.push(punto)
     }
+
   });
 
 // Evento de escucha de mouse para detectar liberación del botón
@@ -52,18 +61,31 @@ canvas.addEventListener('mouseup', function(event) {
     endX = event.offsetX;
     endY = event.offsetY;
     isDrawing = false; // Indica que ya no se está dibujando
-    if(option!="cursor" && option!=null){
+    if(option!="cursor" && option!=null && option!="lapiz"){
         obj = {    
             startX : startX,
             startY : startY,
             endX : endX,
             endY : endY,
             option: option,
-            color: color
+            color: color,
+            cords: null
         };
         lines.push(obj)
     }
-    console.log(lines)
+    else if(option=="lapiz"){
+      obj = {    
+        startX : startX,
+        startY : startY,
+        endX : endX,
+        endY : endY,
+        option: option,
+        color: color,
+        cords: pencil,
+      };
+      lines.push(obj)
+    }
+    pencil = []
 });
 
 //Guarda la opcion elegida en el menu de figuras
@@ -71,7 +93,7 @@ function opcion(op){
   option = op
 }
 
-function menu(x1, y1 , x2 , y2, opt, c){
+function menu(x1, y1 , x2 , y2, opt, c, cr){
   if(x1!=null && y1!=null && x2!= null && y2 != null ){
     if(opt == 'line'){
         Bresenham(x1, y1 , x2 , y2, c)
@@ -87,7 +109,31 @@ function menu(x1, y1 , x2 , y2, opt, c){
         drawPoligon(x1, y1 , x2 , y2, 7,c)
       }else if(opt == 'octagon'){
         drawPoligon(x1, y1 , x2 , y2, 8,c)
-      } 
+      }else if(opt == 'lapiz'){
+        draw_Pencil(x2 , y2, c, cr)
+      }
+  }
+}
+function draw_Pencil(x2 , y2, c, cr){
+  if(cr==null){
+    ctx.strokeStyle=String(c)
+    ctx.beginPath();
+    ctx.moveTo(lastX, lastY);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+    lastX = x2;
+    lastY = y2;
+  }else if(cr!=null){
+    console.log()
+    cr.forEach(function(ct) {
+      ctx.strokeStyle=String(c)
+      ctx.beginPath();
+      ctx.moveTo(lastX, lastY);
+      ctx.lineTo(ct.x2, ct.y2);
+      ctx.stroke();
+      lastX = ct.x2;
+      lastY = ct.y2;
+    });
   }
 }
 
