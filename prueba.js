@@ -2,7 +2,7 @@ const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
 let startX, startY, endX, endY, option; //variables de inicio para los dos puntos y la opcion seleccionada a dibujar
-let lines = [];
+let lines = [], points = [];
 let isDrawing = false; // Indica si se está dibujando actualmente
 var obj = new Object();
 var muestrario, color;// variables para alamcenar el input color y el color en hexa
@@ -29,7 +29,11 @@ function clearCanvas() {
 //hace un barrido al arreglo y dibuja las figuras guardadas en el arreglo
 function barrido(){
     lines.forEach(function(line) {
+      if(line.option=="lapiz"){
+        menu(0, 0, 0, 0, line.option, line.color, line.points)
+      }else{
         menu(line.startX, line.startY, line.endX, line.endY, line.option, line.color);
+      }
     });
 }
 // Evento de escucha de mouse para detectar clic y arrastre
@@ -37,13 +41,19 @@ canvas.addEventListener('mousedown', function(event) {
     startX = event.offsetX;
     startY = event.offsetY;
     isDrawing = true; // Indica que se está dibujando actualmente
+    points.push({ x: event.offsetX, y: event.offsetY });  
 });
 
 // Función para manejar el movimiento del mouse
 canvas.addEventListener("mousemove", function(event) {
     if (isDrawing) { // Verifica si se está dibujando actualmente
       clearCanvas()
-      menu(startX, startY, event.offsetX, event.offsetY, option, color); // Dibuja la figura previsualizada
+      points.push({ x: event.offsetX, y: event.offsetY });
+      if(option=="lapiz"){
+        menu(0, 0, 0, 0, option, color, points)
+      }else{
+        menu(startX, startY, event.offsetX, event.offsetY, option, color); // Dibuja la figura previsualizada
+      }
     }
   });
 
@@ -59,10 +69,12 @@ canvas.addEventListener('mouseup', function(event) {
             endX : endX,
             endY : endY,
             option: option,
-            color: color
+            color: color,
+            points: points
         };
         lines.push(obj)
     }
+    points = [];
     console.log(lines)
 });
 
@@ -71,7 +83,7 @@ function opcion(op){
   option = op
 }
 
-function menu(x1, y1 , x2 , y2, opt, c){
+function menu(x1, y1 , x2 , y2, opt, c, point){
   if(x1!=null && y1!=null && x2!= null && y2 != null ){
     if(opt == 'line'){
         Bresenham(x1, y1 , x2 , y2, c)
@@ -87,8 +99,19 @@ function menu(x1, y1 , x2 , y2, opt, c){
         drawPoligon(x1, y1 , x2 , y2, 7,c)
       }else if(opt == 'octagon'){
         drawPoligon(x1, y1 , x2 , y2, 8,c)
+      }else if(opt == 'lapiz'){
+        DrawPencil(point, c)
       } 
   }
+}
+function DrawPencil(points,c){
+  ctx.strokeStyle=String(c);
+  ctx.beginPath();
+  ctx.moveTo(points[0].x, points[0].y);
+  for (let i = 1; i < points.length; i++) {
+    ctx.lineTo(points[i].x, points[i].y);
+  }
+  ctx.stroke();
 }
 
 function Bresenham(startX, startY, endX, endY, c) {
