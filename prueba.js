@@ -268,3 +268,16 @@ function cargar(){
    };
    input.click();
 }
+
+function convertToPNG(){
+  if(lines.length>0){
+    var image = new Image();
+    image.onload = function() {
+      var link = document.createElement('a');
+      link.href = canvas.toDataURL("image/png");
+      link.download = "imagen.png";
+      link.click();
+    };
+    image.src = canvas.toDataURL("image/png");
+  }
+}
