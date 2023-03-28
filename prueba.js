@@ -101,6 +101,8 @@ function menu(x1, y1 , x2 , y2, opt, c, point){
         drawPoligon(x1, y1 , x2 , y2, 8,c)
       }else if(opt == 'lapiz'){
         DrawPencil(point, c)
+      } else if(opt == 'rectangulo'){
+        drawRectangulo(x1, y1 , x2 , y2, c)
       } 
   }
 }
@@ -216,6 +218,16 @@ function drawPoligon2(centerX, centerY, xCoords, yCoords, sides, c){
     }
     ctx.stroke();
   }
+}
+function drawRectangulo(startX, startY, endX, endY, c){
+
+  const width = endX - startX;
+  const height = endY - startY;
+
+  Bresenham(startX, startY, startX + width, startY, c); // draw top side
+  Bresenham(startX, startY + height, startX + width, startY + height, c); // draw bottom side
+  Bresenham(startX, startY, startX, startY + height, c); // draw left side
+  Bresenham(startX + width, startY, startX + width, startY + height, c); // draw right side
 }
 
 function drawPoligon(startX, startY, endX, endY, sides, c){
