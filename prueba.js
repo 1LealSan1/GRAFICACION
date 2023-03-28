@@ -226,3 +226,33 @@ function drawPoligon(startX, startY, endX, endY, sides, c){
 
   drawPoligon2(centerX, centerY, xCoords, yCoords, sides, c)
 }
+
+function guardar(){
+  if(lines.length>0){
+  // Convertir el array de números aleatorios a una cadena JSON
+  const numerosAleatoriosJSON = JSON.stringify(lines);
+
+  // Crear un archivo JSON con los números aleatorios y descargarlo en el navegador
+  const blob = new Blob([numerosAleatoriosJSON], { type: "application/json;charset=utf-8" });
+  saveAs(blob, "name.json");
+  }
+}
+
+function cargar(){
+   // Cargar el archivo JSON desde el input file
+   const input = document.createElement("input");
+   input.type = "file";
+   input.accept = ".json";
+   input.onchange = () => {
+     const reader = new FileReader();
+     reader.readAsText(input.files[0]);
+     reader.onload = () => {
+       // Parsear la cadena JSON a un array de números aleatorios y asignarlo a la variable correspondiente
+       lines = JSON.parse(reader.result);
+
+       // Mostrar los números aleatorios cargados en el elemento correspondiente
+       barrido();
+     };
+   };
+   input.click();
+}
