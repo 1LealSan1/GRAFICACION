@@ -318,25 +318,13 @@ function drawPoligon2(centerX, centerY, xCoords, yCoords, sides, c, g){
     for (let j = 0; j < steps; j++) { 
         x += xIncrement;
         y += yIncrement;
+        points.push({ x:x,y:y });
         ctx.lineTo(x, y);
     }
     ctx.stroke();
   }
 }
-function drawpix(x,y,c,g){
-  ctx.beginPath();
-  ctx.moveTo(x,y);
-  ctx.lineTo(x+1,y+1);
-  ctx.closePath();
-  ctx.strokeStyle= c;
-  ctx.lineWidth = g;
-  ctx.lineCap = 'round';
-  ctx.stroke();
-  if(guardarPos){
-      var Posicion = {x:x, y:y};
-      points.push(Posicion);
-  }
-}
+
 function drawRectangulo(startX, startY, endX, endY, c, g){
 
   const width = endX - startX;
