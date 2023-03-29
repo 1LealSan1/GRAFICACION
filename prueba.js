@@ -123,7 +123,9 @@ function menu(x1, y1 , x2 , y2, opt, c, g, point){
         DrawPencil(point, c, g)
       } else if(opt == 'rectangulo'){
         drawRectangulo(x1, y1 , x2 , y2, c, g)
-      } 
+      } else if(opt == 'triangle'){
+        drawTriangle(x1, y1 , x2 , y2, c, g)
+      }
   }
 }
 
@@ -264,7 +266,20 @@ function drawPoligon(startX, startY, endX, endY, sides, c, g){
 
   drawPoligon2(centerX, centerY, xCoords, yCoords, sides, c , g)
 }
-
+function drawTriangle(x1,y1,x2,y2,c,g){
+  // calcular las coordenadas del tercer punto
+  var deltaX = x2 - x1;
+  var deltaY = y2 - y1;
+  var angle = Math.atan2(deltaY, deltaX);
+  var length = Math.min(canvas.width, canvas.height) / 3;
+  x3 = Math.round(x1 + length * Math.cos(angle - Math.PI / 3));
+  y3 = Math.round(y1 + length * Math.sin(angle - Math.PI / 3));
+  
+  // dibujar el triángulo utilizando el algoritmo Bresenham
+  Bresenham(x1, y1, x2, y2, c, g);
+  Bresenham(x2, y2, x3, y3, c, g);
+  Bresenham(x3, y3, x1, y1, c, g);
+}
 function guardar(){
   if(lines.length>0){
   // Convertir el array de números aleatorios a una cadena JSON
