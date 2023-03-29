@@ -383,7 +383,7 @@ function cargar(){
        lines = JSON.parse(reader.result);
 
        // Mostrar los números aleatorios cargados en el elemento correspondiente
-       barrido();
+       clearCanvas();
      };
    };
    input.click();
@@ -410,6 +410,7 @@ function convertToPDF(){
       unit: 'pt',
       format: [canvas.width, canvas.height]
     });
+
     // Agrega la imagen del canvas al PDF
     pdf.addImage(canvas.toDataURL(), 'PNG', 0, 0, canvas.width, canvas.height);
 
