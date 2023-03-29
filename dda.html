@@ -4,10 +4,11 @@
     <title>PaintInc</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <link href="style.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 </head>
 <body>
-    <div class="container m-2">
+    <div class="container m-3">
         <div class="row col-4">
             <div class="col p-3 bg-dark-subtle">
                 <form>
@@ -45,6 +46,7 @@
 
                         <input type="radio" class="btn-check" name="btnradio" id="btnradio7" onclick="opcion('octagon')">
                         <label class="btn btn-outline-primary" for="btnradio7"><img src="img/octagon.svg"></label>
+                        <br>
                         <label  class="mb-2 mt-2">Opciones</label>
                         <br>
                         <button type="button" class="btn btn-outline-primary" onclick="guardar()">Guardar</button>
@@ -53,17 +55,21 @@
 
                         <button type="button" class="btn btn-outline-primary" onclick="convertToPNG()">PNG</button>
 
+                        <button type="button" class="btn btn-outline-primary" onclick="convertToPDF()"><img src="img/filetype-pdf.svg" alt="" style="width: 20px; height: 20px;"></button>
+                        <br>
                         <label for="muestrario" class="mt-4 mb-2">Color:</label>
                         <br>
                         <input type="color" id="muestrario">
+                        <br>
+                        <label for="rangegr" class="form-label">Grosor:</label>
+                        <label for="numb" id="numb"></label>
+                        <input type="range" class="form-range" id="rangegr" min="1" max="10" step="1" value="1">
                     </div>
                 </form>
             </div>
-            <div class="col">
-                <div>
-                    <canvas id="canvas" width="1100" height="500" class="nulo"></canvas>
-                    <script src="prueba.js"></script>
-                </div>     
+            <div class="col mt-2">
+                <canvas id="canvas" width="1100" height="500" class="nulo"></canvas>
+                <script src="prueba.js"></script>  
             </div>
         </div>            
     </div>

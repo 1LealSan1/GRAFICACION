@@ -5,7 +5,7 @@ let startX, startY, endX, endY, option; //variables de inicio para los dos punto
 let lines = [], points = [];
 let isDrawing = false; // Indica si se está dibujando actualmente
 var obj = new Object();
-var muestrario, color;// variables para alamcenar el input color y el color en hexa
+var muestrario, color, grosor, gr;// variables para alamcenar el input color y el color en hexa
 
 //escucha el evento de cargar la pagina y manda llamar la funcion starup
 window.addEventListener("load", startup, false);
@@ -13,13 +13,21 @@ window.addEventListener("load", startup, false);
 //obtiene el input y define el valor predeterminado de value del input y manda llamar al evento actualizar si se detecta un cambio en el input
 function startup() {
   muestrario = document.querySelector("#muestrario");
+  grosor = document.querySelector("#rangegr");
   color = muestrario.value;
+  gr = grosor.value;
+  document.getElementById("numb").innerHTML = gr;
   muestrario.addEventListener("input", actualizarPrimero, false);
+  grosor.addEventListener("input", actualizarPrimero2, false);
 }
 
 //obtiene el nuevo valor del input color 
 function actualizarPrimero(event) {
   color =  event.target.value;
+}
+function actualizarPrimero2(event){
+  gr = event.target.value;
+  document.getElementById("numb").innerHTML = gr;
 }
 
 // Función para limpiar el lienzo
@@ -31,9 +39,9 @@ function clearCanvas() {
 function barrido(){
     lines.forEach(function(line) {
       if(line.option=="lapiz"){
-        menu(0, 0, 0, 0, line.option, line.color, line.points)
+        menu(0, 0, 0, 0, line.option, line.color, line.grosor, line.points)
       }else{
-        menu(line.startX, line.startY, line.endX, line.endY, line.option, line.color);
+        menu(line.startX, line.startY, line.endX, line.endY, line.option, line.color, line.grosor, 0);
       }
     });
 }
@@ -51,9 +59,9 @@ canvas.addEventListener("mousemove", function(event) {
       clearCanvas()
       points.push({ x: event.offsetX, y: event.offsetY });
       if(option=="lapiz"){
-        menu(0, 0, 0, 0, option, color, points)
+        menu(0, 0, 0, 0, option, color, gr ,points)
       }else{
-        menu(startX, startY, event.offsetX, event.offsetY, option, color); // Dibuja la figura previsualizada
+        menu(startX, startY, event.offsetX, event.offsetY, option, color, gr); // Dibuja la figura previsualizada
       }
     }
   });
@@ -71,6 +79,7 @@ canvas.addEventListener('mouseup', function(event) {
             endY : endY,
             option: option,
             color: color,
+            grosor: gr
         };
         lines.push(obj)
     }else if(option!="cursor" && option!=null && option=="lapiz"){
@@ -81,12 +90,12 @@ canvas.addEventListener('mouseup', function(event) {
           endY : endY,
           option: option,
           color: color,
+          grosor: gr,
           points: points
         };
         lines.push(obj)
     }
     points = [];
-    console.log(lines)
 });
 
 //Guarda la opcion elegida en el menu de figuras
@@ -94,31 +103,32 @@ function opcion(op){
   option = op
 }
 
-function menu(x1, y1 , x2 , y2, opt, c, point){
+function menu(x1, y1 , x2 , y2, opt, c, g, point){
   if(x1!=null && y1!=null && x2!= null && y2 != null ){
     if(opt == 'line'){
-        Bresenham(x1, y1 , x2 , y2, c)
+        Bresenham(x1, y1 , x2 , y2, c, g)
       }else if(opt =='circle'){
-        drawCircle(x1, y1 , x2 , y2, c)
+        drawCircle(x1, y1 , x2 , y2, c, g)
       }else if(opt == 'square'){
-        drawSquare(x1, y1 , x2 , y2, c)
+        drawSquare(x1, y1 , x2 , y2, c, g)
       }else if(opt == 'pentagon'){
-        drawPoligon(x1, y1 , x2 , y2, 5,c)
+        drawPoligon(x1, y1 , x2 , y2, 5,c, g)
       }else if(opt == 'hexagon'){
-        drawPoligon(x1, y1 , x2 , y2, 6,c)
+        drawPoligon(x1, y1 , x2 , y2, 6,c, g)
       }else if(opt == 'heptagon'){
-        drawPoligon(x1, y1 , x2 , y2, 7,c)
+        drawPoligon(x1, y1 , x2 , y2, 7,c, g)
       }else if(opt == 'octagon'){
-        drawPoligon(x1, y1 , x2 , y2, 8,c)
+        drawPoligon(x1, y1 , x2 , y2, 8,c, g)
       }else if(opt == 'lapiz'){
-        DrawPencil(point, c)
+        DrawPencil(point, c, g)
       } else if(opt == 'rectangulo'){
-        drawRectangulo(x1, y1 , x2 , y2, c)
+        drawRectangulo(x1, y1 , x2 , y2, c, g)
       } 
   }
 }
 
-function DrawPencil(points,c){
+function DrawPencil(points, c, g){
+  ctx.lineWidth = g;
   ctx.strokeStyle=String(c);
   ctx.beginPath();
   ctx.moveTo(points[0].x, points[0].y);
@@ -128,15 +138,17 @@ function DrawPencil(points,c){
   ctx.stroke();
 }
 
-function Bresenham(startX, startY, endX, endY, c) {
+function Bresenham(startX, startY, endX, endY, c, g) {
   let dx = Math.abs(endX - startX);
   let dy = Math.abs(endY - startY);
   let sx = (startX < endX) ? 1 : -1;
   let sy = (startY < endY) ? 1 : -1;
   let error = dx - dy;
-  while (true) {
-    ctx.fillStyle=String(c);
-    ctx.fillRect(startX, startY, 1, 1)
+
+  while (true) {  
+    ctx.lineWidth = g;
+    ctx.strokeStyle=String(c);
+    ctx.strokeRect(startX, startY,1,1)
 
     if (startX === endX && startY === endY) break;
     let e2 = 2 * error;
@@ -151,7 +163,7 @@ function Bresenham(startX, startY, endX, endY, c) {
   }
 }
 
-function drawSquare(startX, startY, endX, endY, c) {
+function drawSquare(startX, startY, endX, endY, c, g) {
   var width = Math.abs(endX - startX);
   var height = Math.abs(endY - startY);
   var squareSize = Math.max(width, height);
@@ -161,30 +173,30 @@ function drawSquare(startX, startY, endX, endY, c) {
 
   var squareX = centerX - squareSize / 2;
   var squareY = centerY - squareSize / 2;
-  Bresenham(squareX, squareY, squareX + squareSize, squareY, c);
-  Bresenham(squareX + squareSize, squareY, squareX + squareSize, squareY + squareSize, c);
-  Bresenham(squareX + squareSize, squareY + squareSize, squareX, squareY + squareSize, c);
-  Bresenham(squareX, squareY + squareSize, squareX, squareY, c);
+  Bresenham(squareX, squareY, squareX + squareSize, squareY, c, g);
+  Bresenham(squareX + squareSize, squareY, squareX + squareSize, squareY + squareSize, c, g);
+  Bresenham(squareX + squareSize, squareY + squareSize, squareX, squareY + squareSize, c, g);
+  Bresenham(squareX, squareY + squareSize, squareX, squareY, c, g);
 }
 
-function drawCircle(startX, startY, endX, endY, c) {
+function drawCircle(startX, startY, endX, endY, c, g) {
   let x0 = (startX + endX) / 2;
   let y0 = (startY + endY) / 2;
   radius  = Math.max(Math.abs(startX - endX), Math.abs(startY - endY)) / 2;
   let x = radius;
   let y = 0;
   let decisionOver2 = 1 - x;
-
+  ctx.lineWidth = g;
   while (y <= x) {
-    ctx.fillStyle=String(c);
-    ctx.fillRect(x + x0, y + y0, 1, 1);
-    ctx.fillRect(y + x0, x + y0, 1, 1);
-    ctx.fillRect(-x + x0, y + y0, 1, 1);
-    ctx.fillRect(-y + x0, x + y0, 1, 1);
-    ctx.fillRect(-x + x0, -y + y0, 1, 1);
-    ctx.fillRect(-y + x0, -x + y0, 1, 1);
-    ctx.fillRect(x + x0, -y + y0, 1, 1);
-    ctx.fillRect(y + x0, -x + y0, 1, 1);
+    ctx.strokeStyle=String(c);
+    ctx.strokeRect(x + x0, y + y0, 1, 1);
+    ctx.strokeRect(y + x0, x + y0, 1, 1);
+    ctx.strokeRect(-x + x0, y + y0, 1, 1);
+    ctx.strokeRect(-y + x0, x + y0, 1, 1);
+    ctx.strokeRect(-x + x0, -y + y0, 1, 1);
+    ctx.strokeRect(-y + x0, -x + y0, 1, 1);
+    ctx.strokeRect(x + x0, -y + y0, 1, 1);
+    ctx.strokeRect(y + x0, -x + y0, 1, 1);
 
     y++;
     if (decisionOver2 <= 0) {
@@ -196,7 +208,7 @@ function drawCircle(startX, startY, endX, endY, c) {
   }
 }
 
-function drawPoligon2(centerX, centerY, xCoords, yCoords, sides, c){
+function drawPoligon2(centerX, centerY, xCoords, yCoords, sides, c, g){
   for (let i = 0; i < sides; i++) {
     const angle = (i * 2 * Math.PI) / sides;
     const x = centerX + radius * Math.cos(angle);
@@ -220,6 +232,7 @@ function drawPoligon2(centerX, centerY, xCoords, yCoords, sides, c){
     let x = x1;
     let y = y1;
     ctx.strokeStyle = String(c)
+    ctx.lineWidth = g;
     ctx.beginPath();
     ctx.moveTo(x, y);
   
@@ -232,24 +245,24 @@ function drawPoligon2(centerX, centerY, xCoords, yCoords, sides, c){
   }
 }
 
-function drawRectangulo(startX, startY, endX, endY, c){
+function drawRectangulo(startX, startY, endX, endY, c, g){
 
   const width = endX - startX;
   const height = endY - startY;
 
-  Bresenham(startX, startY, startX + width, startY, c); // draw top side
-  Bresenham(startX, startY + height, startX + width, startY + height, c); // draw bottom side
-  Bresenham(startX, startY, startX, startY + height, c); // draw left side
-  Bresenham(startX + width, startY, startX + width, startY + height, c); // draw right side
+  Bresenham(startX, startY, startX + width, startY, c, g); // draw top side
+  Bresenham(startX, startY + height, startX + width, startY + height, c, g); // draw bottom side
+  Bresenham(startX, startY, startX, startY + height, c, g); // draw left side
+  Bresenham(startX + width, startY, startX + width, startY + height, c, g); // draw right side
 }
 
-function drawPoligon(startX, startY, endX, endY, sides, c){
+function drawPoligon(startX, startY, endX, endY, sides, c, g){
   let centerX = (startX + endX) / 2;
   let centerY = (startY + endY) / 2;
   let xCoords = [], yCoords = [];
   radius  = Math.max(Math.abs(startX - endX), Math.abs(startY - endY)) / 2;
 
-  drawPoligon2(centerX, centerY, xCoords, yCoords, sides, c)
+  drawPoligon2(centerX, centerY, xCoords, yCoords, sides, c , g)
 }
 
 function guardar(){
@@ -292,5 +305,21 @@ function convertToPNG(){
       link.click();
     };
     image.src = canvas.toDataURL("image/png");
+  }
+}
+
+function convertToPDF(){
+  if(lines.length>0){
+    // Crea un nuevo objeto jsPDF
+    const pdf = new jsPDF({
+      orientation: 'landscape',
+      unit: 'pt',
+      format: [canvas.width, canvas.height]
+    });
+    // Agrega la imagen del canvas al PDF
+    pdf.addImage(canvas.toDataURL(), 'PNG', 0, 0, canvas.width, canvas.height);
+
+    // Descarga el archivo PDF
+    pdf.save('archivo.pdf');
   }
 }
