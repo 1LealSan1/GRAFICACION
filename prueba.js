@@ -79,7 +79,8 @@ canvas.addEventListener('mouseup', function(event) {
             endY : endY,
             option: option,
             color: color,
-            grosor: gr
+            grosor: gr,
+            points: points
         };
         lines.push(obj)
     }else if(option!="cursor" && option!=null && option=="lapiz"){
@@ -96,6 +97,24 @@ canvas.addEventListener('mouseup', function(event) {
         lines.push(obj)
     }
     points = [];
+});
+canvas.addEventListener('click', function(event){
+  optX= event.offsetX;
+  optY= event.offsetY;
+  encontrado = false;
+  let puntero =null, posobjselect =null; 
+  lines.forEach(function(line) {
+    puntero =puntero+ 1;
+    line.points.forEach(function(point){
+      if((optX >= point.x-3) && (optX <= point.x+3) && (optY >= point.y-3) && (optY <= point.y+3)){
+        encontrado = true;
+      }
+    })
+    if(encontrado==true && posobjselect==null){
+      posobjselect = puntero
+    }
+  });
+  console.log(lines[posobjselect-1])
 });
 
 //Guarda la opcion elegida en el menu de figuras
@@ -148,6 +167,7 @@ function Bresenham(startX, startY, endX, endY, c, g) {
   while (true) {  
     ctx.lineWidth = g;
     ctx.strokeStyle=String(c);
+    points.push({ x: startX, y: startY});  
     ctx.strokeRect(startX, startY,1,1)
 
     if (startX === endX && startY === endY) break;
@@ -323,3 +343,4 @@ function convertToPDF(){
     pdf.save('archivo.pdf');
   }
 }
+
