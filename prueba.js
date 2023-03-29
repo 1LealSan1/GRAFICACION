@@ -6,7 +6,7 @@ let lines = [], points = [], lines2 = [];
 let isDrawing = false; // Indica si se está dibujando actualmente
 var obj = new Object();
 var muestrario, color, grosor, gr;// variables para alamcenar el input color y el color en hexa
-
+var selectfigure, posfigure;
 //escucha el evento de cargar la pagina y manda llamar la funcion starup
 window.addEventListener("load", startup, false);
 
@@ -24,17 +24,43 @@ function startup() {
 //obtiene el nuevo valor del input color 
 function actualizarPrimero(event) {
   color =  event.target.value;
+  if(selectfigure){
+    cambiarcolor();
+  }
 }
 function actualizarPrimero2(event){
   gr = event.target.value;
   document.getElementById("numb").innerHTML = gr;
+  if(selectfigure){
+    cambiarGrosor();
+  }
 }
 
+function cambiarcolor(){
+  lines[posfigure].color = color;
+  clearCanvas()
+}
+function cambiarGrosor(){
+  lines[posfigure].grosor = gr;
+  clearCanvas()
+}
 function trash(){
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   lines = []
 }
 
+function eraser(){
+  if(selectfigure){
+    data = lines[posfigure]
+    lines2.push(data)
+
+    lines.splice(posfigure, 1)
+    clearCanvas()
+
+    posfigure = null;
+    selectfigure = false;
+  }
+}
 function deshacer(){
   if(lines.length>0){
     let data = lines.pop();
@@ -122,7 +148,7 @@ canvas.addEventListener('click', function(event){
   optX= event.offsetX;
   optY= event.offsetY;
   encontrado = false;
-  let puntero =null, posobjselect =null; 
+  let puntero =null, posobjselect=null; 
   lines.forEach(function(line) {
     puntero =puntero+ 1;
     line.points.forEach(function(point){
@@ -130,11 +156,12 @@ canvas.addEventListener('click', function(event){
         encontrado = true;
       }
     })
-    if(encontrado==true && posobjselect==null){
-      posobjselect = puntero
+    if(encontrado== true && posobjselect== null){
+      posobjselect = puntero -1;
+      selectfigure = encontrado;
+      posfigure = posobjselect
     }
   });
-  console.log(lines[posobjselect-1])
 });
 
 //Guarda la opcion elegida en el menu de figuras
@@ -230,6 +257,16 @@ function drawCircle(startX, startY, endX, endY, c, g) {
   let decisionOver2 = 1 - x;
   ctx.lineWidth = g;
   while (y <= x) {
+
+    points.push({ x:x + x0 , y:y + y0 });
+    points.push({x:y + x0, y:x + y0});
+    points.push({x:-x + x0,y: y + y0});
+    points.push({x:-y + x0,y: x + y0});
+    points.push({x:-x + x0,y: -y + y});
+    points.push({x:-y + x0,y: -x + y0});
+    points.push({x:x + x0,y: -y + y0});
+    points.push({x:y + x0,y: -x + y0});
+
     ctx.strokeStyle=String(c);
     ctx.strokeRect(x + x0, y + y0, 1, 1);
     ctx.strokeRect(y + x0, x + y0, 1, 1);
@@ -278,9 +315,10 @@ function drawPoligon2(centerX, centerY, xCoords, yCoords, sides, c, g){
     ctx.beginPath();
     ctx.moveTo(x, y);
   
-    for (let j = 0; j < steps; j++) {
+    for (let j = 0; j < steps; j++) { 
         x += xIncrement;
         y += yIncrement;
+        points.push({ x:x,y:y });
         ctx.lineTo(x, y);
     }
     ctx.stroke();
@@ -380,3 +418,30 @@ function convertToPDF(){
   }
 }
 
+function moverAtras(){
+  if(selectfigure){
+      if(posfigure > 0){
+          let aux = lines[posfigure-1];
+          lines[posfigure-1] = lines[posfigure]
+          lines[posfigure] = aux;
+          posfigure = posfigure-1;
+          clearCanvas()
+      }
+  }
+}
+
+function moverAdelante(){
+  if(selectfigure){
+      if(posfigure < (lines.length-1)){
+          let aux = lines[posfigure+1];
+          lines[posfigure+1] = lines[posfigure]
+          lines[posfigure] = aux;
+          posfigure = posfigure+1;
+          clearCanvas()
+      }
+  }
+}
+
+function moverFig(){
+  
+}
