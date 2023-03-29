@@ -160,7 +160,6 @@ canvas.addEventListener('click', function(event){
       posobjselect = puntero -1;
       selectfigure = encontrado;
       posfigure = posobjselect
-      console.log(lines[posobjselect])
     }
   });
 });
@@ -438,19 +437,19 @@ function moverAtras(){
           lines[posfigure-1] = lines[posfigure]
           lines[posfigure] = aux;
           posfigure = posfigure-1;
-          redibujado(lines);
+          clearCanvas()
       }
   }
 }
 
 function moverAdelante(){
-  if(posfigure){
+  if(selectfigure){
       if(posfigure < (lines.length-1)){
           let aux = lines[posfigure+1];
           lines[posfigure+1] = lines[posfigure]
           lines[posfigure] = aux;
           posfigure = posfigure+1;
-          redibujado(lines);
+          clearCanvas()
       }
   }
 }
