@@ -441,3 +441,7 @@ function moverAdelante(){
       }
   }
 }
+
+function moverFig(){
+  
+}
