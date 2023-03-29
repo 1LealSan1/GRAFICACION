@@ -16,6 +16,7 @@ function startup() {
   color = muestrario.value;
   muestrario.addEventListener("input", actualizarPrimero, false);
 }
+
 //obtiene el nuevo valor del input color 
 function actualizarPrimero(event) {
   color =  event.target.value;
@@ -62,7 +63,7 @@ canvas.addEventListener('mouseup', function(event) {
     endX = event.offsetX;
     endY = event.offsetY;
     isDrawing = false; // Indica que ya no se está dibujando
-    if(option!="cursor" && option!=null){
+    if(option!="cursor" && option!=null && option!="lapiz"){
         obj = {    
             startX : startX,
             startY : startY,
@@ -70,7 +71,17 @@ canvas.addEventListener('mouseup', function(event) {
             endY : endY,
             option: option,
             color: color,
-            points: points
+        };
+        lines.push(obj)
+    }else if(option!="cursor" && option!=null && option=="lapiz"){
+        obj = {    
+          startX : startX,
+          startY : startY,
+          endX : endX,
+          endY : endY,
+          option: option,
+          color: color,
+          points: points
         };
         lines.push(obj)
     }
@@ -106,6 +117,7 @@ function menu(x1, y1 , x2 , y2, opt, c, point){
       } 
   }
 }
+
 function DrawPencil(points,c){
   ctx.strokeStyle=String(c);
   ctx.beginPath();
@@ -219,6 +231,7 @@ function drawPoligon2(centerX, centerY, xCoords, yCoords, sides, c){
     ctx.stroke();
   }
 }
+
 function drawRectangulo(startX, startY, endX, endY, c){
 
   const width = endX - startX;

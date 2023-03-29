@@ -7,14 +7,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 </head>
 <body>
-    <div class="container m-3">
-        <div class="row bg-dark-subtle m-lg-1 p-3">
-            <div class="col-auto">
+    <div class="container m-2">
+        <div class="row col-4">
+            <div class="col p-3 bg-dark-subtle">
                 <form>
                     <div class="btn-group-block" role="radiogroup" aria-label="Basic radio toggle button group">
+                        <label class="mb-2">Edicion</label>
+                        <br>
                         <input type="radio" class="btn-check" name="btnradio" id="btnradio0" onclick="opcion('cursor')" checked>
                         <label class="btn btn-outline-primary" for="btnradio0"><img src="img/cursor.svg" class="icon"></label>
-                        
+                        <br>
+                        <label class="mb-2 mt-2">Figuras</label>
+                        <br>
                         <input type="radio" class="btn-check" name="btnradio" id="btnradio8" onclick="opcion('lapiz')">
                         <label class="btn btn-outline-primary" for="btnradio8"><img src="img/pencil.svg" class="icon"></label>
 
@@ -39,32 +43,29 @@
                         <input type="radio" class="btn-check" name="btnradio" id="btnradio6" onclick="opcion('heptagon')">
                         <label class="btn btn-outline-primary" for="btnradio6"><img src="img/heptagon.svg"></label>
 
-                        
                         <input type="radio" class="btn-check" name="btnradio" id="btnradio7" onclick="opcion('octagon')">
                         <label class="btn btn-outline-primary" for="btnradio7"><img src="img/octagon.svg"></label>
-                        
+                        <label  class="mb-2 mt-2">Opciones</label>
+                        <br>
                         <button type="button" class="btn btn-outline-primary" onclick="guardar()">Guardar</button>
 
                         <button type="button" class="btn btn-outline-primary" onclick="cargar()">Cargar</button>
 
                         <button type="button" class="btn btn-outline-primary" onclick="convertToPNG()">PNG</button>
-                    </div>
 
-                    <div class="mt-3">
-                        <label for="muestrario">Color:</label>
+                        <label for="muestrario" class="mt-4 mb-2">Color:</label>
+                        <br>
                         <input type="color" id="muestrario">
                     </div>
                 </form>
             </div>
-        </div>            
-        <div class="row">
-            <div class="col-auto">
+            <div class="col">
                 <div>
-                    <canvas id="canvas" width="1300" height="500" class="nulo"></canvas>
+                    <canvas id="canvas" width="1100" height="500" class="nulo"></canvas>
                     <script src="prueba.js"></script>
-                </div>
+                </div>     
             </div>
-        </div>
+        </div>            
     </div>
 </body>
 </html>
