@@ -2,7 +2,7 @@ const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
 let startX, startY, endX, endY, option; //variables de inicio para los dos puntos y la opcion seleccionada a dibujar
-let lines = [], points = [], lines2 = [];
+let lines = [], points = [], lines2 = [], points2 = [];
 let isDrawing = false; // Indica si se está dibujando actualmente
 var obj = new Object();
 var muestrario, color, grosor, gr;// variables para alamcenar el input color y el color en hexa
@@ -96,17 +96,22 @@ canvas.addEventListener('mousedown', function(event) {
     startX = event.offsetX;
     startY = event.offsetY;
     isDrawing = true; // Indica que se está dibujando actualmente
-    points.push({ x: event.offsetX, y: event.offsetY });  
+    if(option=="lapiz"){
+      points.push({ x: event.offsetX, y: event.offsetY });  
+    }else if(option!='lapiz'){
+      points2.push({ x: event.offsetX, y: event.offsetY });  
+    }
 });
 
 // Función para manejar el movimiento del mouse
 canvas.addEventListener("mousemove", function(event) {
     if (isDrawing) { // Verifica si se está dibujando actualmente
       clearCanvas()
-      points.push({ x: event.offsetX, y: event.offsetY });
       if(option=="lapiz"){
+        points.push({ x: event.offsetX, y: event.offsetY });
         menu(0, 0, 0, 0, option, color, gr ,points)
-      }else{
+      }else if(option!='lapiz'){
+        points2.push({ x: event.offsetX, y: event.offsetY });
         menu(startX, startY, event.offsetX, event.offsetY, option, color, gr); // Dibuja la figura previsualizada
       }
     }
@@ -126,7 +131,7 @@ canvas.addEventListener('mouseup', function(event) {
             option: option,
             color: color,
             grosor: gr,
-            points: points
+            points: points2
         };
         lines.push(obj)
     }else if(option!="cursor" && option!=null && option=="lapiz"){
@@ -142,7 +147,10 @@ canvas.addEventListener('mouseup', function(event) {
         };
         lines.push(obj)
     }
+    console.log(points)
+    console.log(points2)
     points = [];
+    points2 = [];
 });
 canvas.addEventListener('click', function(event){
   optX= event.offsetX;
@@ -216,7 +224,7 @@ function Bresenham(startX, startY, endX, endY, c, g) {
   while (true) {  
     ctx.lineWidth = g;
     ctx.strokeStyle=String(c);
-    points.push({ x: startX, y: startY});  
+    points2.push({ x: startX, y: startY});  
     ctx.strokeRect(startX, startY,1,1)
 
     if (startX === endX && startY === endY) break;
@@ -230,6 +238,7 @@ function Bresenham(startX, startY, endX, endY, c, g) {
       startY += sy;
     }
   }
+  
 }
 
 function drawSquare(startX, startY, endX, endY, c, g) {
@@ -258,14 +267,14 @@ function drawCircle(startX, startY, endX, endY, c, g) {
   ctx.lineWidth = g;
   while (y <= x) {
 
-    points.push({ x:x + x0 , y:y + y0 });
-    points.push({x:y + x0, y:x + y0});
-    points.push({x:-x + x0,y: y + y0});
-    points.push({x:-y + x0,y: x + y0});
-    points.push({x:-x + x0,y: -y + y});
-    points.push({x:-y + x0,y: -x + y0});
-    points.push({x:x + x0,y: -y + y0});
-    points.push({x:y + x0,y: -x + y0});
+    points2.push({ x:x + x0 , y:y + y0 });
+    points2.push({x:y + x0, y:x + y0});
+    points2.push({x:-x + x0,y: y + y0});
+    points2.push({x:-y + x0,y: x + y0});
+    points2.push({x:-x + x0,y: -y + y});
+    points2.push({x:-y + x0,y: -x + y0});
+    points2.push({x:x + x0,y: -y + y0});
+    points2.push({x:y + x0,y: -x + y0});
 
     ctx.strokeStyle=String(c);
     ctx.strokeRect(x + x0, y + y0, 1, 1);
@@ -318,7 +327,7 @@ function drawPoligon2(centerX, centerY, xCoords, yCoords, sides, c, g){
     for (let j = 0; j < steps; j++) { 
         x += xIncrement;
         y += yIncrement;
-        points.push({ x:x,y:y });
+        points2.push({ x:x,y:y });
         ctx.lineTo(x, y);
     }
     ctx.stroke();
