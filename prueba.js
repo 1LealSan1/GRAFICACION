@@ -2,7 +2,7 @@ const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
 let startX, startY, endX, endY, option; //variables de inicio para los dos puntos y la opcion seleccionada a dibujar
-let lines = [], points = [];
+let lines = [], points = [], lines2 = [];
 let isDrawing = false; // Indica si se está dibujando actualmente
 var obj = new Object();
 var muestrario, color, grosor, gr;// variables para alamcenar el input color y el color en hexa
@@ -30,6 +30,26 @@ function actualizarPrimero2(event){
   document.getElementById("numb").innerHTML = gr;
 }
 
+function trash(){
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  lines = []
+}
+
+function deshacer(){
+  if(lines.length>0){
+    let data = lines.pop();
+    lines2.push(data)
+    clearCanvas()
+  }
+}
+
+function rehacer(){
+  if(lines2.length>0){
+    let data = lines2.pop();
+    lines.push(data)
+    clearCanvas()
+  }
+}
 // Función para limpiar el lienzo
 function clearCanvas() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -280,6 +300,7 @@ function drawTriangle(x1,y1,x2,y2,c,g){
   Bresenham(x2, y2, x3, y3, c, g);
   Bresenham(x3, y3, x1, y1, c, g);
 }
+
 function guardar(){
   if(lines.length>0){
   // Convertir el array de números aleatorios a una cadena JSON

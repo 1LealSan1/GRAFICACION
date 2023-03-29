@@ -17,6 +17,16 @@
                         <br>
                         <input type="radio" class="btn-check" name="btnradio" id="btnradio0" onclick="opcion('cursor')" checked>
                         <label class="btn btn-outline-primary" for="btnradio0"><img src="img/cursor.svg" class="icon"></label>
+
+                        <input type="radio" class="btn-check" name="btnradio" id="btnradio12" onclick="deshacer()">
+                        <label class="btn btn-outline-primary" for="btnradio12"><img src="img/deshacer.svg" class="icon"></label>
+                        
+                        <input type="radio" class="btn-check" name="btnradio" id="btnradio13" onclick="rehacer()">
+                        <label class="btn btn-outline-primary" for="btnradio13"><img src="img/rehacer.svg" class="icon"></label>
+
+                        <input type="radio" class="btn-check" name="btnradio" id="btnradio11" onclick="trash()">
+                        <label class="btn btn-outline-primary" for="btnradio11"><img src="img/trash3.svg" class="icon"></label>
+
                         <br>
                         <label class="mb-2 mt-2">Figuras</label>
                         <br>
@@ -52,11 +62,11 @@
                         <br>
                         <label  class="mb-2 mt-2">Opciones</label>
                         <br>
-                        <button type="button" class="btn btn-outline-primary" onclick="guardar()">Guardar</button>
+                        <button type="button" class="btn btn-outline-primary" onclick="guardar()" alt="Guardar"><img src="img/save.svg"></button>
 
-                        <button type="button" class="btn btn-outline-primary" onclick="cargar()">Cargar</button>
+                        <button type="button" class="btn btn-outline-primary" onclick="cargar()"><img src="img/load.svg" alt=""></button>
 
-                        <button type="button" class="btn btn-outline-primary" onclick="convertToPNG()">PNG</button>
+                        <button type="button" class="btn btn-outline-primary" onclick="convertToPNG()"><img src="img/pdg.svg" alt=""></button>
 
                         <button type="button" class="btn btn-outline-primary" onclick="convertToPDF()"><img src="img/filetype-pdf.svg" alt="" style="width: 20px; height: 20px;"></button>
                         <br>
