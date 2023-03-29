@@ -7,6 +7,8 @@ let isDrawing = false; // Indica si se está dibujando actualmente
 var obj = new Object();
 var muestrario, color, grosor, gr;// variables para alamcenar el input color y el color en hexa
 var selectfigure, posfigure;
+var moverFig=false;
+
 //escucha el evento de cargar la pagina y manda llamar la funcion starup
 window.addEventListener("load", startup, false);
 
@@ -28,6 +30,7 @@ function actualizarPrimero(event) {
     cambiarcolor();
   }
 }
+
 function actualizarPrimero2(event){
   gr = event.target.value;
   document.getElementById("numb").innerHTML = gr;
@@ -40,10 +43,12 @@ function cambiarcolor(){
   lines[posfigure].color = color;
   clearCanvas()
 }
+
 function cambiarGrosor(){
   lines[posfigure].grosor = gr;
   clearCanvas()
 }
+
 function trash(){
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   lines = []
@@ -61,6 +66,7 @@ function eraser(){
     selectfigure = false;
   }
 }
+
 function deshacer(){
   if(lines.length>0){
     let data = lines.pop();
@@ -97,6 +103,9 @@ canvas.addEventListener('mousedown', function(event) {
     startY = event.offsetY;
     isDrawing = true; // Indica que se está dibujando actualmente
     points.push({ x: event.offsetX, y: event.offsetY });  
+    if(moverFig==true){
+      isDrawing = false
+    }
 });
 
 // Función para manejar el movimiento del mouse
@@ -104,11 +113,13 @@ canvas.addEventListener("mousemove", function(event) {
     if (isDrawing) { // Verifica si se está dibujando actualmente
       clearCanvas()
       points.push({ x: event.offsetX, y: event.offsetY });
-      if(option=="lapiz"){
+      if(option=="lapiz" && moverFig==false){
         menu(0, 0, 0, 0, option, color, gr ,points)
-      }else{
+      }else if(option!="lapiz" && moverFig==false){
         menu(startX, startY, event.offsetX, event.offsetY, option, color, gr); // Dibuja la figura previsualizada
       }
+    }else if(moverFig){
+      mover(startX,startY,event.offsetX,event.offsetY)
     }
   });
 
@@ -442,6 +453,35 @@ function moverAdelante(){
   }
 }
 
-function moverFig(){
-  
+function moverfig(){
+  if(selectfigure){
+    moverFig=true
+  }
+}
+function mover(x1,x2,y1,y2){
+  if(selectfigure){
+      clearCanvas()
+      data = lines[posfigure]
+
+      difxMov = x1 - x2;
+      difyMov = y1 - y2;
+
+
+      if(option=="lapiz" && moverFig==false){
+        menu(0, 0, 0, 0, option, color, gr ,points)
+      }else if(option!="lapiz" && moverFig==false){
+        menu(startX, startY, x1, y1, option, color, gr); // Dibuja la figura previsualizada
+      }
+  }
+}
+
+function compSelect(){
+  for(j=0; j<totalP; j++){
+      let xBusq = dibujadoCopia[numFig].pos[j].x;
+      let yBusq = dibujadoCopia[numFig].pos[j].y;
+      if((puntos[0] >= xBusq-3) && (puntos[0] <= xBusq+3) && (puntos[1] >= yBusq-3) && (puntos[1] <= yBusq+3)){
+          mover = true;
+          break;
+      }
+  }
 }
