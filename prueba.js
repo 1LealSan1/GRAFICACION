@@ -2,7 +2,7 @@ const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
 let startX, startY, endX, endY, option; //variables de inicio para los dos puntos y la opcion seleccionada a dibujar
-let lines = [], points = [], lines2 = [], points2 = [];
+let lines = [], points = [], lines2 = [], points2 = [], aux=[];
 let isDrawing = false; // Indica si se está dibujando actualmente
 var obj = new Object();
 var muestrario, color, grosor, gr;// variables para alamcenar el input color y el color en hexa
@@ -134,6 +134,9 @@ canvas.addEventListener('mouseup', function(event) {
             points: points2
         };
         lines.push(obj)
+        aux = lines.slice();
+        lines2.push([aux])
+
     }else if(option!="cursor" && option!=null && option=="lapiz"){
         obj = {    
           startX : startX,
@@ -146,9 +149,11 @@ canvas.addEventListener('mouseup', function(event) {
           points: points
         };
         lines.push(obj)
+        aux = lines.slice();
+        lines2.push([aux])
+
     }
-    console.log(points)
-    console.log(points2)
+    aux = [];
     points = [];
     points2 = [];
 });
