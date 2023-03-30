@@ -38,10 +38,12 @@ function actualizarPrimero2(event){
 
 function cambiarcolor(){
   lines[posfigure].color = color;
+
   clearCanvas()
 }
 function cambiarGrosor(){
   lines[posfigure].grosor = gr;
+
   clearCanvas()
 }
 function trash(){
