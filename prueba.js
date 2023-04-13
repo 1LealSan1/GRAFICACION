@@ -458,7 +458,3 @@ function moverAdelante(){
       }
   }
 }
-
-function moverFig(){
-  
-}
