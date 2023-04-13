@@ -11,7 +11,7 @@ var moverFig=false;
 
 //escucha el evento de cargar la pagina y manda llamar la funcion starup
 window.addEventListener("load", startup, false);
-
+//hika
 //obtiene el input y define el valor predeterminado de value del input y manda llamar al evento actualizar si se detecta un cambio en el input
 function startup() {
   muestrario = document.querySelector("#muestrario");
