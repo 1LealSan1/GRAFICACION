@@ -191,6 +191,7 @@ canvas.addEventListener('mouseup', function(event) {
     points2 = [];
     points3 = [];   
     verificarpunto = false
+    console.log(lines)
 });
 canvas.addEventListener('click', function(event){
   optX= event.offsetX;
@@ -298,7 +299,6 @@ function Bresenham(startX, startY, endX, endY, c, g) {
       startY += sy;
     }
   }
-  
 }
 
 function drawSquare(startX, startY, endX, endY, c, g,cf) {
