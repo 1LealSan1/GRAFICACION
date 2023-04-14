@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pintar Fondo de Figura en JavaScript</title>
+</head>
+<body>
+    <canvas id="miCanvas" width="400" height="400"></canvas>
+
+    <script>
+        // Obtener el contexto del lienzo
+        var canvas = document.getElementById("miCanvas");
+        var ctx = canvas.getContext("2d");
+
+        // Coordenadas x1, y1, x2, y2
+        var x1 = 50;
+        var y1 = 50;
+        var x2 = 150;
+        var y2 = 150;
+
+        // Calcular el ancho y alto de la figura
+        var ancho = x2 - x1;
+        var alto = y2 - y1;
+
+        // Pintar el fondo de la figura
+        ctx.fillStyle = "red"; // Color del fondo
+        ctx.fillRect(x1, y1, ancho, alto); // Pintar el fondo usando las coordenadas y dimensiones calculadas
+    </script>
+</body>
+</html>
