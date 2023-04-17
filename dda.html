@@ -36,6 +36,10 @@
                         <input type="radio" class="btn-check" name="btnradio" id="btnradio16" onclick="moverAtras()">
                         <label class="btn btn-outline-primary" for="btnradio16"><img src="img/abajo.svg" class="icon"></label>
 
+                        <input type="radio" class="btn-check" name="btnradio" id="btnradio17" onclick="opcion('moverfig')">
+                        <label class="btn btn-outline-primary" for="btnradio17"><img src="img/move.svg" class="icon"></label>
+
+
                         <br>
                         <label class="mb-2 mt-2">Figuras</label>
                         <br>
@@ -79,9 +83,13 @@
 
                         <button type="button" class="btn btn-outline-primary" onclick="convertToPDF()"><img src="img/filetype-pdf.svg" alt="" style="width: 20px; height: 20px;"></button>
                         <br>
-                        <label for="muestrario" class="mt-4 mb-2">Color:</label>
+                        <label for="muestrario" class="mt-4 mb-2">Color cotorno:</label>
                         <br>
                         <input type="color" id="muestrario">
+                        <br>
+                        <label for="muestrario2" class="mt-4 mb-2">Color del fondo:</label>
+                        <br>
+                        <input type="color" id="muestrario2" value= "#ffffff">
                         <br>
                         <label for="rangegr" class="form-label">Grosor:</label>
                         <label for="numb" id="numb"></label>
