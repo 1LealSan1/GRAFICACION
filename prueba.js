@@ -2,7 +2,7 @@ const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
 let startX, startY, endX, endY, option; //variables de inicio para los dos puntos y la opcion seleccionada a dibujar
-let lines = [], points = [], lines2 = [], points2 = [], aux=[], points3 =[];
+let lines = [], points = [], lines2 = [], points2 = [], aux=[], points3 =[], points4 = [];
 let isDrawing = false; // Indica si se está dibujando actualmente
 let isDragging = false;
 var obj = new Object();
@@ -183,13 +183,14 @@ canvas.addEventListener('mouseup', function(event) {
         aux = lines.slice();
         lines2.push([aux])
 
-    }else if(option!="cursor" && option!=null && option!="lapiz" && option == "moverfig"){
-      lines[posfigure].points=(points3)
+    }else if(option!="cursor" && option!=null && option!="lapiz" && option == "moverfig" && points4.length!=0){
+      lines[posfigure].points=(points4.concat(points2))
     }
     aux = [];
     points = [];
     points2 = [];
-    points3 = [];   
+    points3 = [];
+    points4 = [];      
     verificarpunto = false
     console.log(lines)
 });
@@ -282,7 +283,8 @@ function Bresenham(startX, startY, endX, endY, c, g) {
     ctx.strokeStyle=String(c);
 
     if(isDragging==true){
-      points3.push({ x: startX, y: startY}); 
+      points3.push({ x: startX, y: startY});
+      points4 = points3
     }else{
       points2.push({ x: startX, y: startY}); 
     }
@@ -299,6 +301,7 @@ function Bresenham(startX, startY, endX, endY, c, g) {
       startY += sy;
     }
   }
+  points3 = []
 }
 
 function drawSquare(startX, startY, endX, endY, c, g,cf) {
@@ -315,7 +318,12 @@ function drawSquare(startX, startY, endX, endY, c, g,cf) {
   // Recolectar puntos del fondo de la figura
   for (let x = squareX; x <= squareX + squareSize; x++) {
     for (let y = squareY; y <= squareY + squareSize; y++) {
-      points2.push({ x: x, y: y });
+        if(isDragging==true){
+          points3.push({ x:x,y:y });
+          points2 = points3
+        }else{
+          points2.push({ x:x,y:y });
+        }
       // Pintar el pixel del fondo con el color deseado
       ctx.fillStyle = String(cf);
       ctx.fillRect(x, y, 1, 1);
@@ -326,6 +334,7 @@ function drawSquare(startX, startY, endX, endY, c, g,cf) {
   Bresenham(squareX + squareSize, squareY, squareX + squareSize, squareY + squareSize, c, g);
   Bresenham(squareX + squareSize, squareY + squareSize, squareX, squareY + squareSize, c, g);
   Bresenham(squareX, squareY + squareSize, squareX, squareY, c, g);
+  points3 = []
 }
 
 function drawCircle(startX, startY, endX, endY, c, g, cf) {
@@ -346,6 +355,7 @@ function drawCircle(startX, startY, endX, endY, c, g, cf) {
       points3.push({x:-y + x0,y: -x + y0});
       points3.push({x:x + x0,y: -y + y0});
       points3.push({x:y + x0,y: -x + y0}); 
+      points4 = points3
     }else{
       points2.push({ x:x + x0 , y:y + y0 });
       points2.push({x:y + x0, y:x + y0});
@@ -376,6 +386,7 @@ function drawCircle(startX, startY, endX, endY, c, g, cf) {
       decisionOver2 += 2 * (y - x) + 1;
     }
   }
+  points3 = []
 }
 
 function drawPoligon2(centerX, centerY, xCoords, yCoords, sides, c, g, cf){
@@ -412,6 +423,7 @@ function drawPoligon2(centerX, centerY, xCoords, yCoords, sides, c, g, cf){
 
         if(isDragging==true){
           points3.push({ x:x,y:y });
+          points4 = points3
         }else{
           points2.push({ x:x,y:y });
         }
@@ -425,6 +437,7 @@ function drawPoligon2(centerX, centerY, xCoords, yCoords, sides, c, g, cf){
     }
     ctx.stroke();
   }
+  points3 = []
 }
 
 function drawRectangulo(startX, startY, endX, endY, c, g, cf){
@@ -435,7 +448,8 @@ function drawRectangulo(startX, startY, endX, endY, c, g, cf){
     for (let x = startX; x <= startX + width; x++) {
       for (let y = startY; y <= startY + height; y++) {
         if(isDragging==true){
-          points3.push({ x: x, y: y }); 
+          points3.push({ x: x, y: y });
+          points2 = points3
         }else{
           points2.push({ x: x, y: y });
         }
@@ -448,6 +462,7 @@ function drawRectangulo(startX, startY, endX, endY, c, g, cf){
   Bresenham(startX, startY + height, startX + width, startY + height, c, g); // draw bottom side
   Bresenham(startX, startY, startX, startY + height, c, g); // draw left side
   Bresenham(startX + width, startY, startX + width, startY + height, c, g); // draw right side
+
 }
 
 function drawPoligon(startX, startY, endX, endY, sides, c, g, cf){
@@ -471,6 +486,7 @@ function drawTriangle(x1,y1,x2,y2,c,g, cf){
     for (let y = Math.min(y1, y2, y3); y <= Math.max(y1, y2, y3); y++) {
         if(isDragging==true){
           points3.push({ x: x, y: y }); 
+          points2 = points3
         }else{
           points2.push({ x: x, y: y });
         }
@@ -488,6 +504,7 @@ function drawTriangle(x1,y1,x2,y2,c,g, cf){
   Bresenham(x1, y1, x2, y2, c, g);
   Bresenham(x2, y2, x3, y3, c, g);
   Bresenham(x3, y3, x1, y1, c, g);
+  points3 = []
 }
 
 function guardar(){
@@ -576,22 +593,38 @@ function moverAdelante(){
 
 function moverFig(x3, y3) {
   figseg = lines[posfigure];
+  if(figseg.option!="lapiz"){
+      x1 = figseg.startX;
+      y1 = figseg.startY;
+      x2 = figseg.endX;
+      y2 = figseg.endY;
+      dx = x1 - x3
+      dy = y1 - y3
 
-  x1 = figseg.startX;
-  y1 = figseg.startY;
-  x2 = figseg.endX;
-  y2 = figseg.endY;
-  dx = x1 - x3
-  dy = y1 - y3
+      figseg.startX = Math.round(x1 - dx)
+      figseg.startY = Math.round(y1 - dy)
+      figseg.endX = Math.round( x2 - dx)
+      figseg.endY = Math.round(y2 - dy)
 
-  figseg.startX = Math.round(x1 - dx)
-  figseg.startY = Math.round(y1 - dy)
-  figseg.endX = Math.round( x2 - dx)
-  figseg.endY = Math.round(y2 - dy)
+      lines[posfigure].startX = figseg.startX;
+      lines[posfigure].startY = figseg.startY;
+      lines[posfigure].endX = figseg.endX;
+      lines[posfigure].endY = figseg.endY;
 
-  lines[posfigure].startX = figseg.startX;
-  lines[posfigure].startY = figseg.startY;
-  lines[posfigure].endX = figseg.endX;
-  lines[posfigure].endY = figseg.endY;
+  }else if (figseg.option=="lapiz") {
+    for (let i = 0; i < figseg.points.length; i++) {
+      x1 = figseg.points[i].x
+      y1 = figseg.points[i].y
+
+      dx = x1 - x3
+      dy = y1 - y3
+
+      figseg.points[i].x += Math.round(x1 - x3)
+      figseg.points[i].y += Math.round(y1 - y3)
+
+      lines[posfigure].points[i].x = figseg.points[i].x
+      lines[posfigure].points[i].y = figseg.points[i].y
+    }
+  }
   clearCanvas();
 }
