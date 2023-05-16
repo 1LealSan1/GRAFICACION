@@ -173,6 +173,7 @@ canvas.addEventListener('click', function(event){
       posobjselect = puntero -1;
       selectfigure = encontrado;
       posfigure = posobjselect
+      console.log(lines[posfigure])
     }
   });
 });
